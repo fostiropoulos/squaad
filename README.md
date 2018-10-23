@@ -107,9 +107,10 @@ If not want to run any balancing, use `balancers={ "Unbalanced":None}`
 
 dataset=myConnection.getQualityCompilation()
 df = pd.DataFrame(dataset)
-df['affiliation']= np.where(((df["domain"] == 'google.com') & (df["organization"]=='google')) |
-								((df["domain"] == 'apache.org') & (df["organization"]=='apache')) |
-								((df["domain"] == 'netflix.com') & (df["organization"]=='netflix'))
+df['affiliation']= np.where(
+		((df["domain"] == 'google.com') & (df["organization"]=='google')) |
+		((df["domain"] == 'apache.org') & (df["organization"]=='apache')) |
+		((df["domain"] == 'netflix.com') & (df["organization"]=='netflix'))
                 ,df["organization"]+"-affiliated",df["organization"] +"-unaffiliated" )
 X=df[['locs_inc', 'cplxs_inc', 'smls_inc', 'vuls_inc', 'fbgs_inc', 'locs_dec', 'cplxs_dec', 'smls_dec', 'vuls_dec', 'fbgs_dec']]
 Y=df['affiliation']
