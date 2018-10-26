@@ -98,7 +98,7 @@ class ml():
             for column in split_columns:
                 dataset=dataset[column].unique()
 
-        kf = KFold(len(dataset), n_folds=kfolds, shuffle=True)
+        kf = KFold(n_folds=kfolds, shuffle=True)
         fold=0;
         foldid = {}
         totacc = {}
@@ -118,7 +118,7 @@ class ml():
                 ytlog[name][balancer]=[]
                 yplog[name][balancer]=[]
 
-        for train_index, test_index in kf:
+        for train_index, test_index in kf.split(dataset):
             #foldid += 1
             X_train=None
             y_train=None
