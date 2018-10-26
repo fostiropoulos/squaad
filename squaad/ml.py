@@ -16,7 +16,7 @@ from imblearn.combine import SMOTEENN, SMOTETomek
 import pandas as pd
 import numpy as np
 import seaborn as sns
-from sklearn import cross_validation
+from sklearn.model_selection import KFold
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.metrics import accuracy_score, roc_auc_score, precision_score, recall_score, f1_score
 import os
@@ -98,7 +98,7 @@ class ml():
             for column in split_columns:
                 dataset=dataset[column].unique()
 
-        kf = cross_validation.KFold(len(dataset), n_folds=kfolds, shuffle=True)
+        kf = KFold(len(dataset), n_folds=kfolds, shuffle=True)
         fold=0;
         foldid = {}
         totacc = {}
