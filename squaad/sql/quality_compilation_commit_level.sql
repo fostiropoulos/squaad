@@ -14,7 +14,7 @@ WITH
                everything.cwhen as cwhen,
                everything.message as message,
 
-               COALESCE(metric.cnt, 0) AS cnt
+               COALESCE(metric.cnt, NULL) AS cnt
              FROM (SELECT DISTINCT
                      cs.csha as csha,
                      cs.email as email,
@@ -852,7 +852,7 @@ WITH
     (SELECT
                     everything.csha,
 
-                    COALESCE(metric.cnt, 0) AS cnt
+                    COALESCE(metric.cnt, NULL) AS cnt
                   FROM (SELECT DISTINCT
                           csha
                         FROM commits
@@ -876,6 +876,13 @@ WITH
 
                        ) AS metric
           ON metric.csha = everything.csha),
+          ip as (
+                                                       (select prev as csha
+                                                        from impact_pairs)
+                                                       union
+                                                       (select curr as csha
+                                                        from impact_pairs)
+                                                     ),
     quality_metrics as (
       SELECT
         locs.email         AS email,
@@ -921,7 +928,7 @@ WITH
         JOIN clss_dec ON clss_dec.csha = funcs_dec.csha
         JOIN pkgs_dec ON pkgs_dec.csha = clss_dec.csha
         JOIN cplxs_dec ON cplxs_dec.csha = pkgs_dec.csha
-        JOIN smls_dec ON smls_dec.csha = cplxs_dec.csha
+        JOIN smls_dec ON smfbgs_incls_dec.csha = cplxs_dec.csha
         JOIN pmds_dec ON pmds_dec.csha = smls_dec.csha
         JOIN vuls_dec ON vuls_dec.csha = pmds_dec.csha
         JOIN scgs_dec ON scgs_dec.csha = vuls_dec.csha
@@ -937,6 +944,7 @@ WITH
         JOIN vuls_inc ON pmds_inc.csha = vuls_inc.csha
         JOIN scgs_inc ON scgs_inc.csha = vuls_inc.csha
         JOIN fbgs_inc ON fbgs_inc.csha = scgs_inc.csha
+        RIGHT OUTER JOIN anal ON fbgs_inc.csha=anal.csha
     -- JOIN email_app_group_by_impactful ON email_app_group_by_impactful.email = fbgs_inc.email
   )
 
