@@ -1,4 +1,3 @@
-from sklearn.neighbors import NearestNeighbors
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -82,7 +81,7 @@ class ml():
             for column in split_columns:
                 dataset=dataset[column].unique()
 
-        kf = KFold(n_folds=kfolds, shuffle=True)
+        kf = KFold(n_splits=kfolds, shuffle=True)
         fold=0;
         foldid = {}
         totacc = {}
