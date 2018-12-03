@@ -1,28 +1,32 @@
-## SQUAAD ANALYSIS FRAMEWORK
+# SQUAAD ANALYSIS FRAMEWORK
 
 ## Dependencies
 
 Install R on Ubuntu:
+
 `sudo apt-get install r-base`
 
 ## Installation
 
-###Releases
+`pip install squaad`
+
+### Releases
+
 * V1.0 `https://github.com/fostiropoulos/squaad/releases/download/v1.0/squaad-1.0.tar.gz`
 
 
-### To install the SQUAAD library
+### Install from Binary
 `pip install squaad-1.0.tar.gz`
 
 ## Usage
 
-#### Creating new database connection
+### Creating new database connection
 ~~~~
 myConnection=db("config.json","cache")
 print("Connection Status: %s"%myConnection.testConnection())
 ~~~~
 
-#### Config.json and Cache
+### Config.json and Cache
 
 * Config.json follows the following format:
 ~~~~
@@ -30,13 +34,13 @@ print("Connection Status: %s"%myConnection.testConnection())
 ~~~~
 * Cache folder is used to save results of the queries and uses the cache next time you execute a query.
 
-#### Games-Howell Statistics Test
+### Games-Howell Statistics Test
 
 ~~~~
 stats.gamesHowellBinomial({"GROUP1":{True:100, False:3999}, "GROUP2":{True:2999,False:2939}})
 ~~~~~
 
-#### Classification Pipeline with KFold Usage
+### Classification Pipeline with KFold Usage
 
 Parameters
 
@@ -47,7 +51,7 @@ Parameters
 * `classifiers` (Optional)  dictionary containing classifiers to use
 * `balancers` (Optional)  the balancers you want to run
 
-##### Classifiers
+### Classifiers
 
 Default Classifiers:
 * Nearest Neighbors
@@ -61,7 +65,7 @@ Default Classifiers:
 * Naive Bayes
 * QDA
 
-#### Balancers
+### Balancers
 
 Default Classifiers:
 * Unbalanced
@@ -70,7 +74,7 @@ Default Classifiers:
 * SMOTETomek
 * RandomUnderSampler
 
-#### ML Pipeline examples
+### ML Pipeline examples
 
 ~~~~
 X=df[['locs_inc', 'cplxs_inc', 'smls_inc', 'vuls_inc', 'fbgs_inc', 'locs_dec', 'cplxs_dec', 'smls_dec', 'vuls_dec', 'fbgs_dec']]
