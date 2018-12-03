@@ -3,14 +3,21 @@ import os
 import pickle
 import xlwt
 
-"""
 
-File helper functions to help generate reports, serialize files and more.
-
-"""
 class file():
-
+	"""File helper functions to help generate reports, serialize files and more.
+	"""
+	@staticmethod
 	def saveResultsExcel(results,path):
+		"""Save results in Excel file, dictionary 2d
+
+		Example:
+			file.saveResultsExcel(results,"stat.xls")
+		Args:
+			results (obj): Dictionary 2d, example[A][B]=example[B][A]
+			path (str): path to the Excel file to be saved
+		"""
+
 		book = xlwt.Workbook()
 		sh = book.add_sheet("output")
 		n=1
@@ -49,12 +56,25 @@ class file():
 
 
 	@staticmethod
-	def load_obj(name):
-		if not os.path.isfile(name):
+	def load_obj(path):
+		"""Load pickle object
+		Example:
+			file.load_obj("test")
+		Args:
+			path (str): file path to pickle object
+		"""
+		if not os.path.isfile(path):
 			return None
-		with open(name, 'rb') as f:
+		with open(path, 'rb') as f:
 			return pickle.load(f)
 
-	def save_obj(obj, name ):
-		with open(name , 'wb') as f:
+	@staticmethod
+	def save_obj(obj, path ):
+		"""Save pickle object
+		Example:
+			file.save_obj(dict,"test")
+		Args:
+			path (str): file path to pickle object
+		"""
+		with open(path , 'wb') as f:
 			pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)

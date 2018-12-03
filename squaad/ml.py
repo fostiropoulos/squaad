@@ -24,8 +24,18 @@ import time
 import matplotlib.pyplot as plt
 
 class ml():
-    def __init__(self, outputFolder=None,output=False,debug=False):
+    """Machine Learning Pipeline Class
+    """
 
+    def __init__(self, outputFolder=None,output=False,debug=False):
+        """Constructor for pipeline.
+
+        Example:
+            mlPipeline=ml(output=True, outputFolder="cache")
+        Args:
+            outputFolder (str): Dictionary 2d, example[A][B]=example[B][A]
+            path (str): path to the Excel file to be saved
+        """
         self.outputFolder=outputFolder
         if(outputFolder!=None):
             if(not os.path.isdir(outputFolder)):
@@ -36,58 +46,32 @@ class ml():
         else:
             self.output=False
         self.debug=debug
-    """
-        The goal of this function is to make it easy for someone with no experience in ML, to run a pipeline,
-        based on the SQUAAD data. This is a very limited function, please consider understanding your data better
-        and running and running the correct analysis, pre-processing.
 
-        X = Pandas dataframe with set of data.
-        Y = Labels for the set of data.
-        split_columns unimplemented, columns to split by. That is columns that can have bias, we take into consideration during splitting
-        kfolds=10, number of folds to run.
-        classifiers={"Nearest Neighbors":KNeighborsClassifier(3),
-                        "Linear SVM":    SVC(kernel="linear", C=0.025),
-                        "RBF SVM":    SVC(gamma=2, C=1),
-                        "Gaussian Process":    GaussianProcessClassifier(1.0 * RBF(1.0)),
-                        "Decision Tree" :    DecisionTreeClassifier(max_depth=5),
-                        "Random Forest":    RandomForestClassifier(max_depth=5, n_estimators=10, max_features=1),
-                        "Neural Net":    MLPClassifier(alpha=1),
-                        "AdaBoost":    AdaBoostClassifier(),
-                        "Naive Bayes":    GaussianNB(),
-                        "QDA":QuadraticDiscriminantAnalysis()
-                        },
-        the classifiers you want to run, at least one must be present
-        balancers={
-            "Unbalanced":None,
-            "SMOTE":SMOTE(),
-            "SMOTEEN":SMOTEENN(),
-            "SMOTETomek":SMOTETomek(),
-            "RandomUnderSampler":RandomUnderSampler()
-        }
-        the balancers you want to run, at least one must be present. If not want to run any balancing, use only "Unbalanced":None,
-
-    """
-    def classificationPipeLineKfold(self,
-                    X,Y, split_columns=None, kfolds=10,
-                    classifiers={"Nearest Neighbors":KNeighborsClassifier(3),
-                                    "Linear SVM":    SVC(kernel="linear", C=0.025),
-                                    "RBF SVM":    SVC(gamma=2, C=1),
-                                    "Gaussian Process":    GaussianProcessClassifier(1.0 * RBF(1.0)),
-                                    "Decision Tree" :    DecisionTreeClassifier(max_depth=5),
-                                    "Random Forest":    RandomForestClassifier(max_depth=5, n_estimators=10, max_features=1),
-                                    "Neural Net":    MLPClassifier(alpha=1),
-                                    "AdaBoost":    AdaBoostClassifier(),
-                                    "Naive Bayes":    GaussianNB(),
-                                    "QDA":QuadraticDiscriminantAnalysis()
-                                    },
-                                    balancers={
-                                        "Unbalanced":None,
-                                        "SMOTE":SMOTE(),
-                                        "SMOTEEN":SMOTEENN(),
-                                        "SMOTETomek":SMOTETomek(),
-                                        "RandomUnderSampler":RandomUnderSampler()
-                                    }
-                                    ):
+    def classificationPipeLineKfold(self, X,Y, split_columns=None, kfolds=10,
+                                        classifiers={"Nearest Neighbors":KNeighborsClassifier(3),
+                                                        "Linear SVM":    SVC(kernel="linear", C=0.025),
+                                                        "RBF SVM":    SVC(gamma=2, C=1),
+                                                        "Gaussian Process":    GaussianProcessClassifier(1.0 * RBF(1.0)),
+                                                        "Decision Tree" :    DecisionTreeClassifier(max_depth=5),
+                                                        "Random Forest":    RandomForestClassifier(max_depth=5, n_estimators=10, max_features=1),
+                                                        "Neural Net":    MLPClassifier(alpha=1),
+                                                        "AdaBoost":    AdaBoostClassifier(),
+                                                        "Naive Bayes":    GaussianNB(),
+                                                        "QDA":QuadraticDiscriminantAnalysis()},
+                                        balancers={"Unbalanced":None,
+                                                    "SMOTE":SMOTE(),
+                                                    "SMOTEEN":SMOTEENN(),
+                                                    "SMOTETomek":SMOTETomek(),
+                                                    "RandomUnderSampler":RandomUnderSampler()}):
+        """Classification pipeline, with balancing of data and cross validation.
+        Args:
+            X(str): Pandas dataframe with set of data.
+            Y(str): Labels for the set of data.
+            split_columns(array): unimplemented, columns to split by. That is columns that can have bias, we take into consideration during splitting
+            kfolds(int): number of folds to run.
+            classifiers(obj): dictionary of classifiers. the classifiers you want to run, at least one must be present
+            balancers(obj): Dictionary of Balancers to run, set None for no balancers and/or "Unbalanced":None to include unbalanced data in your analysis
+        """
 
         # TODO feature weights
         scores_aff={}

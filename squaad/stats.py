@@ -79,14 +79,13 @@ class stats():
 		self.gh = robjects.globalenv['games.howell']
 
 
-	"""
-		Compares groups with their occurances, works for observable discrete events.
-		E.g. "How many times event A occured."
-		Groups, list of classes that are potential outcomes
-		values, their observations
-		{"group":{True:1000,False:50},"group2":{True:10020,False:5220}}
-	"""
 	def gamesHowellBinomial(self, groups):
+		"""Compares groups with their occurances, works for observable discrete events.	E.g. "How many times event A occured." Groups, list of classes that are potential outcomes values, their observations
+		Args:
+			groups(obj): Dictionary of groups
+		Example:
+			stats.gamesHowellBinomial({"group":{True:1000,False:50},"group2":{True:10020,False:5220}})
+		"""
 		groupNames=[]
 		groupValues=[]
 		for group in groups:
@@ -102,6 +101,12 @@ class stats():
 
 
 	def rTableToDict(results):
+		"""Convert r results into a python dictionary format
+		Args:
+			results(obj): r object results in table format
+		Example:
+			stats.rTableToDict(self.gh(robjects.StrVector(groupNames),robjects.IntVector(groupValues)))
+		"""
 		tableDict={}
 		for i in range(len(results[0])):
 			firstQuant=str(results.rx(i+1,True)[0]).split("\n")[0].split(":")[0].split(' ')[1]
