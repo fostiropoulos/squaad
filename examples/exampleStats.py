@@ -20,9 +20,10 @@ results={}
 
 groups={}
 for entry in affiliation:
-    groups[entry[0]+"_"+entry[1]]={}
-    groups[entry[0]+"_"+entry[1]][True]=int(entry[4])
-    groups[entry[0]+"_"+entry[1]][False]=int(entry[5])-int(entry[4])
+    affKey=entry['organization']+"_"+entry['status']
+    groups[affKey]={}
+    groups[affKey][True]=int(entry['c_impactful'])
+    groups[affKey][False]=int(entry['c_impactful'])-int(entry['c_analyzed'])
 
 
 results["comp"]=stats.gamesHowellBinomial(groups)
