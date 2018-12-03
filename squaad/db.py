@@ -225,14 +225,7 @@ class db():
 	        fbgs_dec.cnt       AS fbgs_dec
 	"""
 	def getQualityCompilationCommitLevel(self):
-
-		results = self.executeQueryWithCache('quality_compilation_commit_level.sql')
-		columns = [column[0] for column in self.cur.description]
-		compilation=[]
-		for row in results:
-			compilation.append(dict(zip(columns, row)))
-
-		return compilation
+		return self.executeQueryWithCache('quality_compilation_commit_level.sql')
 
 	"""
 		Get Compilation at the organization level and affiliation status
@@ -269,4 +262,77 @@ class db():
 	"""
 	def getAffiliationQuality(self):
 		results = self.executeQueryWithCache('increase_decrease_affiliation.sql')
+		return results
+	"""
+	Gets commit level the quality metrics. Sparse results.
+
+		csha
+		application
+		cwhen
+		message
+		branch
+		email
+		csha
+		classes
+		comment_lines_density
+		vulnerabilities
+		lines
+		ncloc
+		complexity
+		security_rating
+		major_violations
+		duplicated_blocks
+		code_smells
+		file_complexity
+		functions
+		duplicated_files
+		duplicated_lines_density
+		reliability_rating
+		critical_violations
+		violations
+		statements
+		blocker_violations
+		reliability_remediation_effort
+		duplicated_lines
+		bugs
+		security_remediation_effort
+		directories
+		info_violations
+		sqale_index
+		sqale_debt_ratio
+		minor_violations
+		files
+		sqale_rating
+		csha
+		basic
+		emptycode
+		cloneimplementation
+		comments
+		codesize
+		stringandstringbuffer
+		naming
+		strictexceptions
+		optimization
+		design
+		securitycodeguidelines
+		braces
+		typeresolution
+		coupling
+		finalizer
+		importstatements
+		unusedcode
+		unnecessary
+		csha
+		security
+		bad_practice
+		malicious_code
+		performance
+		correctness
+		style
+		experimental
+		mt_correctness
+		i18n
+	"""
+	def getQualityDifferenceCommitLevel(self):
+		results = self.executeQueryWithCache('quality_difference_commit_level.sql')
 		return results
