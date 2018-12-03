@@ -1,20 +1,21 @@
-from setuptools import setup
+import setuptools
 
-setup(name='squaad',
-      version='1.0',
-      description='Helper functions for running queries, ml pipeline, statistical analysis on SQUAAD dataset',
-      url='http://github.com/fostiropoulos',
-      author='Iordanis Fostiropoulos',
-      author_email='fostirop@usc.edu',
-      license='MIT',
-      packages=['squaad'],
-      install_requires=[
-          'sklearn',
-          'numpy',
-          'seaborn',
-          'matplotlib',
-          'imblearn',
-          'xlwt',
-          'rpy2'
-      ],
-      zip_safe=False)
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+setuptools.setup(
+    name="squaad",
+    version="1.0",
+    author='Iordanis Fostiropoulos',
+    author_email='danny.fostiropoulos@gmail.com',
+    description='Helper functions for running queries, ml pipeline, statistical analysis on SQUAAD framework',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="http://github.com/fostiropoulos/squaad",
+    packages=setuptools.find_packages(),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+        "Operating System :: OS Independent",
+    ],
+)
