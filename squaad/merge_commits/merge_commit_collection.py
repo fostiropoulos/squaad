@@ -11,6 +11,12 @@ class MergeCommit(BaseConverters):
 	app: str
 	split_commit: str
 	merge_commit: str
+	date_split: datetime
+	date_merged: datetime
+	files_changed: str
+	loc_added: int
+	loc_removed: int
+	loc_total: int
 
 
 @dataclass
@@ -37,7 +43,7 @@ class BranchCommit(BaseConverters):
 	loc_total: int
 
 def populate_merge_tables():
-	db = db_lite.db('esem_db', 'alex.polak')
+	db = db_lite.db("../../config.json")
 	db.add_table(MergeCommit)
 	db.add_table(MasterCommit)
 	db.add_table(BranchCommit)
@@ -55,10 +61,19 @@ def populate_merge_tables():
 
 		merge_commits = app_commits[app_commits.duplicated(subset='curr')].curr
 		for merge_commit in merge_commits:
-			dev_stats, master_stats, split_commit = git_data.get_merge_commit_stats(merge_commit)
+			merge_stats, dev_stats, master_stats, split_commit, split_date = git_data.get_merge_commit_stats(merge_commit)
 
 			if split_commit:
-				db.add_row(MergeCommit(id_, app, split_commit, merge_commit))
+				db.add_row(MergeCommit(id_,
+									   app,
+									   split_commit,
+									   merge_commit,
+									   split_date,
+									   merge_stats.committed_date,
+									   " ".join(merge_stats.file_stats.keys()),
+									   merge_stats.overall_stats['insertions'],
+									   merge_stats.overall_stats['deletions'],
+									   merge_stats.overall_stats['lines']))
 
 				for c in dev_stats:
 					bc = BranchCommit(id_,

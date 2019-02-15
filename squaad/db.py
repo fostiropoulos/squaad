@@ -9,6 +9,37 @@ Utilities and functions for retreiving specific type of data from the squaad Dat
 Makes working with the data easier and avoids re-writing queries. Also makes sure the queries
 used for the analysis are correct since they are validated.
 """
+
+def load_db_config(config_file):
+	try:
+		with open(config_file) as json_data_file:
+			config = json.load(json_data_file)
+	except Exception as e:
+		print("Could not laod configuration file: " + config_file)
+		print(e)
+		raise
+
+	try:
+		psql_config = config["pgsql"]
+	except Exception as e:
+		print("config file is incorrectly formatted or does not contain psql settings.")
+		print(e)
+		raise
+
+	try:
+		user = psql_config["user"]
+		dbname = psql_config["db"]
+	except Exception as e:
+		print("Username or db name not provided")
+		print(e)
+		raise
+
+	host = psql_config.get("host", "localhost")
+	passwd = psql_config.get("passwd")
+
+	return user, dbname, host, passwd
+
+
 class db():
 	cur=None;
 
@@ -27,16 +58,10 @@ class db():
 			if(not os.path.isdir(cache_folder)):
 				raise Exception("Cache folder %s doesn't exist"%cache_folder)
 
+		user, dbname, host, passwd = load_db_config(config_file)
+
 		try:
-			with open(config_file) as json_data_file:
-				config = json.load(json_data_file)
-		except Exception as e:
-			print("Could not laod configuration file: "+config_file)
-			print(e)
-			raise
-		#print("Connecting to Database: ")
-		try:
-			conn = psycopg2.connect("dbname='%s' user='%s' host='%s' password='%s'"%(config["pgsql"]["db"],config["pgsql"]["user"],config["pgsql"]["host"],config["pgsql"]["passwd"],))
+			conn = psycopg2.connect("dbname='%s' user='%s' host='%s' password='%s'"%(dbname,user,host,passwd,))
 		except Exception as e:
 			print ("I am unable to connect to the database")
 			print(e)

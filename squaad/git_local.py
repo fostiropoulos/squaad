@@ -100,7 +100,10 @@ class GitData(object):
 		try:
 			split_commit = self.repo.git.merge_base(mc_master, mc_branch)
 		except Exception as e:
-			return [], [], None
+			return [], [], None, None, None
+
+		merge_stats = self.get_commit_stats(mc)
+		split_date = self.get_commit_stats(split_commit).committed_date
 
 		range_branch = c2_and_not_c1.format(c1=mc_master, c2=mc_branch)
 
@@ -110,4 +113,4 @@ class GitData(object):
 
 		master_stats = self.get_commits_stats(range_master)
 
-		return dev_stats, master_stats, split_commit
+		return merge_stats, dev_stats, master_stats, split_commit, split_date

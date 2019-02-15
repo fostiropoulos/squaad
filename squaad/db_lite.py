@@ -9,6 +9,7 @@ from typing import *
 import sqlalchemy
 import pandas as pd
 from sqlalchemy.types import String, Float, DateTime, BigInteger
+from  squaad.db import load_db_config
 
 
 """
@@ -54,8 +55,8 @@ class BaseConverters:
 		return cls.__name__.lower()
 
 
-def connect_sqlalchemy_db(db_name, user):
-	connection_string = "postgresql+psycopg2://{}@localhost:5432/{}".format(user, db_name)
+def connect_sqlalchemy_db(db_name, user, host):
+	connection_string = "postgresql+psycopg2://{}@{}:5432/{}".format(user, host, db_name)
 
 	engine = sqlalchemy.create_engine(connection_string).connect()
 	meta = sqlalchemy.MetaData(engine)
@@ -64,8 +65,9 @@ def connect_sqlalchemy_db(db_name, user):
 
 class db(object):
 
-	def __init__(self, db_name: str, user: str):
-		self.engine, self.meta = connect_sqlalchemy_db(db_name, user)
+	def __init__(self, config=None):
+		user, dbname, host, passwd = load_db_config(config)
+		self.engine, self.meta = connect_sqlalchemy_db(dbname, user, host)
 		self.meta.reflect()
 
 	def add_table(self, class_, replace=True):
