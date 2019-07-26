@@ -4,6 +4,8 @@ from git.util import hex_to_bin
 import git.repo.fun as repo_funcs
 import os
 
+from squaad.commit_stats import CommitStats
+
 
 class GitRepo(object):
 
@@ -41,19 +43,6 @@ c2_and_not_c1 = "{c1}..{c2}"
 c1_parents = "{c1}^@"
 c1_not_nth_parent = "{c1}^{n}"
 c1_not_self = "{c1}^"
-
-
-class CommitStats:
-
-	def __init__(self, c):
-		self.csha = c.hexsha
-		self.author = c.author.email
-		self.authored_date = c.authored_datetime
-		self.committer = c.committer.email
-		self.committed_date = c.committed_datetime.replace(tzinfo=None)
-		self.commit_msg = c.message
-		self.file_stats = c.stats.files
-		self.overall_stats = c.stats.total
 
 
 class GitData(object):
