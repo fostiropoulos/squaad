@@ -23,6 +23,7 @@ class db():
 			config_file (str): path to config file that contains the connection information. Fromat, `{"pgsql":{"host":"","user":"","passwd":"","db":""}`
 			cache_folder (:obj:`str`, optional): path to the cache folder. None for no cache.
 		"""
+
 		if(cache_folder!=None):
 			if(not os.path.isdir(cache_folder)):
 				raise Exception("Cache folder %s doesn't exist"%cache_folder)
@@ -33,6 +34,7 @@ class db():
 		except Exception as e:
 			print("Could not laod configuration file: "+config_file)
 			raise e
+
 		try:
 			conn = psycopg2.connect("dbname='%s' user='%s' host='%s' password='%s'"%(config["pgsql"]["db"],config["pgsql"]["user"],config["pgsql"]["host"],config["pgsql"]["passwd"],))
 		except Exception as e:

@@ -1,22 +1,16 @@
 # SQUAAD ANALYSIS FRAMEWORK
 
-## Dependencies
-
-Install R on Ubuntu:
-
-`sudo apt-get install r-base`
-
 ## Installation
 
 `pip install squaad`
 
 ### Releases
 
-* V1.0 `https://github.com/fostiropoulos/squaad/releases/download/v1.0/squaad-1.0.tar.gz`
+* V2.0 `https://github.com/fostiropoulos/squaad/releases/download/v2.0/squaad-2.0.tar.gz`
 
 
 ### Install from Binary
-`pip install squaad-1.0.tar.gz`
+`pip install squaad-2.0.tar.gz`
 
 ## Usage
 

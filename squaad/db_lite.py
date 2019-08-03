@@ -62,7 +62,7 @@ def connect_sqlalchemy_db(db_name, user):
 	return engine, meta
 
 
-class db(object):
+class db_lite(object):
 
 	def __init__(self, db_name: str, user: str):
 		self.engine, self.meta = connect_sqlalchemy_db(db_name, user)
@@ -112,4 +112,3 @@ class db(object):
 
 	def table_to_pd(self, name, cols=None, index_col=None, parse_dates=None):
 		return pd.read_sql_table(name, con=self.engine, columns=cols, index_col=index_col, parse_dates=parse_dates)
-
