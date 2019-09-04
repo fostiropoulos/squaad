@@ -1,5 +1,5 @@
 from pingouin import pairwise_gameshowell
-
+import pandas as pd
 class stats():
 
 
