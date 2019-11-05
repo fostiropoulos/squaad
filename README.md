@@ -6,7 +6,7 @@
 
 ### Releases
 
-* V2.0 `https://github.com/fostiropoulos/squaad/releases/download/v2.0/squaad-2.0.tar.gz`
+* V2.0 `https://github.com/fostiropoulos/squaad/releases/download/2.1/squaad-2.1.tar.gz`
 
 
 ### Install from Binary
