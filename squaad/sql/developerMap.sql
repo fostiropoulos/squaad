@@ -86,8 +86,5 @@ WITH email_app_group_by_impactful AS (select
                                       and cs.cwhen >= analreal.minwhen
                                       and cs.email = analreal.email
                                     order by cs.cwhen),
-
-time_table_results as (SELECT a.email as a_email,  a.app as a_app, a.cwhen as a_cwhen, a.csha as a_csha, b.email as b_email, b.app as b_app,  b.cwhen as b_cwhen, b.csha as b_csha FROM email_app_group_by_impactful as a JOIN email_app_group_by_impactful as b ON (extract(year from age(a.cwhen, b.cwhen))*12 + extract(month from age(a.cwhen, b.cwhen)))>=0 and (extract(year from age(a.cwhen, b.cwhen))*12 + extract(month from age(a.cwhen, b.cwhen)))<=1 WHERE a.email!=b.email AND a.app=b.app)
-
-
+time_table_results AS (SELECT a.email as a_email,  a.app as a_app, a.cwhen as a_cwhen, a.csha as a_csha, b.email as b_email, b.app as b_app,  b.cwhen as b_cwhen, b.csha as b_csha FROM email_app_group_by_impactful as a JOIN email_app_group_by_impactful as b ON (extract(year from age(a.cwhen, b.cwhen))*12 + extract(month from age(a.cwhen, b.cwhen)))>=0 and (extract(year from age(a.cwhen, b.cwhen))*12 + extract(month from age(a.cwhen, b.cwhen)))<=1 WHERE a.email!=b.email AND a.app=b.app)
 SELECT * FROM time_table_results

@@ -4,6 +4,7 @@ import json
 import sys
 from squaad import file
 import os
+import glob
 
 class db():
 	"""Utilities and functions for retreiving specific type of data from the squaad Database. Makes working with the data easier and avoids re-writing queries. Also makes sure the queries used for the analysis are correct since they are validated.
@@ -32,17 +33,25 @@ class db():
 			with open(config_file) as json_data_file:
 				config = json.load(json_data_file)
 		except Exception as e:
-			print("Could not laod configuration file: "+config_file)
+			print("Could not load configuration file: "+config_file)
 			raise e
-
+		self.config=config
 		try:
-			conn = psycopg2.connect("dbname='%s' user='%s' host='%s' password='%s'"%(config["pgsql"]["db"],config["pgsql"]["user"],config["pgsql"]["host"],config["pgsql"]["passwd"],))
+			self.conn = psycopg2.connect("dbname='%s' user='%s' host='%s' password='%s'"%(config["pgsql"]["db"],config["pgsql"]["user"],config["pgsql"]["host"],config["pgsql"]["passwd"],))
 		except Exception as e:
 			print ("I am unable to connect to the database")
 			raise e
-		self.cur = conn.cursor()
+		self.cur =  self.conn.cursor()
 		self.testConnection()
 		self.cache_folder=cache_folder
+
+	def reset_connection(self):
+		self.cur.close()
+		self.conn.close()
+		config=self.config
+		self.conn = psycopg2.connect("dbname='%s' user='%s' host='%s' password='%s'"%(config["pgsql"]["db"],config["pgsql"]["user"],config["pgsql"]["host"],config["pgsql"]["passwd"],))
+		self.cur = self.conn.cursor()
+		return True
 
 	def testConnection(self):
 		"""Initialize the Database object that connects to the SQUAAD database. Please ensure you have the proper database formatself. Support only for postgresql.
@@ -57,7 +66,12 @@ class db():
 			print("Could not connect")
 			raise e
 
-	def getQuery(name):
+	def listQueries(self):
+		"""Helper function, lists all available query files
+		"""
+		return [os.path.basename(x) for x in glob.glob(os.path.join(os.path.dirname(__file__), 'sql',"*"))]
+
+	def getQuery(self,name):
 		"""Helper function, reads sql file into a string
 		Args:
 			name (str): name of predefined SQL file to read. Stored internally
@@ -74,9 +88,15 @@ class db():
 		Return:
 			File object if succesful, None otherwise
 		"""
+
 		if(self.cache_folder!=None):
 			return file.file.load_obj(os.path.join(self.cache_folder,name))
 		return None
+
+	def clearCache(self):
+		for f in glob.glob(os.path.join(self.cache_folder,"*")):
+			os.remove(f)
+
 
 	def saveCache(self,data,name):
 		"""If cache folder exists, save object to it
@@ -93,21 +113,36 @@ class db():
 		Args:
 			queryFile (str): Executes a query file and saves results to cache
 		"""
+
 		results=self.readCache(queryFile)
 		if(results!=None):
 			return results
 
-		query=db.getQuery(queryFile)
-		self.cur.execute(query)
-
-		results = self.cur.fetchall()
-		columns = [column[0] for column in self.cur.description]
-		formatted =[]
-		for row in results:
-			formatted.append(dict(zip(columns, row)))
-
-
+		query=self.getQuery(queryFile)
+		formatted=self.executeCustomQuery(query)
 		self.saveCache(formatted,queryFile)
+
+
+
+		return formatted
+
+	def executeCustomQuery(self,query):
+		"""Executes user defined query.
+		Args:
+			query (str): SQL syntax query
+		"""
+		try:
+			self.cur.execute(query)
+
+			results = self.cur.fetchall()
+			columns = [column[0] for column in self.cur.description]
+			formatted =[]
+			for row in results:
+				formatted.append(dict(zip(columns, row)))
+
+		except Exception as e:
+			self.reset_connection()
+			raise e
 		return formatted
 
 	def getDeveloperTimeMap(self):
@@ -133,6 +168,7 @@ class db():
 
 
 		return developerMap;
+
 
 	def getQuality(self):
 		"""Gets the quality metrics of a developer at the application level. Query: increase_decrease_query.sql

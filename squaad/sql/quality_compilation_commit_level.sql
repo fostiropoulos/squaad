@@ -883,6 +883,23 @@ WITH
                                                        (select curr as csha
                                                         from impact_pairs)
                                                      ),
+                                                       anal as (
+                                                         (select
+                                                            application,
+                                                            csha
+                                                          from findbugs_summary_uni)
+                                                         union
+                                                         (select
+                                                            application,
+                                                            csha
+                                                          from pmd_uni)
+                                                         union
+                                                         (select
+                                                            application,
+                                                            csha
+                                                          from sonarqube_system_uni)
+                                                       ),
+
     quality_metrics as (
       SELECT
         locs.email         AS email,
@@ -928,7 +945,7 @@ WITH
         JOIN clss_dec ON clss_dec.csha = funcs_dec.csha
         JOIN pkgs_dec ON pkgs_dec.csha = clss_dec.csha
         JOIN cplxs_dec ON cplxs_dec.csha = pkgs_dec.csha
-        JOIN smls_dec ON smfbgs_incls_dec.csha = cplxs_dec.csha
+        JOIN smls_dec ON smls_dec.csha = cplxs_dec.csha
         JOIN pmds_dec ON pmds_dec.csha = smls_dec.csha
         JOIN vuls_dec ON vuls_dec.csha = pmds_dec.csha
         JOIN scgs_dec ON scgs_dec.csha = vuls_dec.csha
